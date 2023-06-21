@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react'
-import './App.css'
-import axios from 'axios'
 import Tasklist from '../Components/Tasklist';
 
 interface Task {
@@ -18,9 +16,9 @@ function App() {
     fetchTasks();
   }, []);
 
-  async function fetchTasks () {
-    try{
-      
+  async function fetchTasks() {
+    try {
+
     }
     catch {
 
@@ -28,7 +26,7 @@ function App() {
   }
 
   async function updateTasks() {
-    try{
+    try {
 
     }
     catch {
@@ -37,18 +35,18 @@ function App() {
   }
 
   async function deleteTask() {
-    try{
+    try {
 
     }
-    catch{
-      
+    catch {
+
     }
   }
 
 
   return (
     <div>
-      <Tasklist tasks={tasks} onUpdate={updateTasks} onDelete={deleteTask}/>
+      <Tasklist tasks={tasks} onUpdate={updateTasks} onDelete={deleteTask} />
 
 
     </div>

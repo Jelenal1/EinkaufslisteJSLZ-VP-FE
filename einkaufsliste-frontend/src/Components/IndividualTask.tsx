@@ -1,5 +1,3 @@
-import React from "react";
-
 
 interface Task {
   id?: number;
@@ -17,7 +15,7 @@ interface TaskProps {
 }
 
 function IndividualTask({ task, onUpdate, onDelete }: TaskProps) {
-  return(
+  return (
     <div>
       <h1>{task.title}</h1>
     </div>
