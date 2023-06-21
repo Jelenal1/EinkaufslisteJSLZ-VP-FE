@@ -11,7 +11,7 @@ interface Task {
 interface TaskListProps {
   tasks: Task[];
   onUpdate: (updatedTask: Task) => void;
-  onDelete: (deletedTask: Task) => void;
+  onDelete: (deletedTask: number) => void;
 }
 
 function TaskList({ tasks, onUpdate, onDelete }: TaskListProps) {

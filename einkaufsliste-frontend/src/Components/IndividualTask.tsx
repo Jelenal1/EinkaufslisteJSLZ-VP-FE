@@ -11,7 +11,7 @@ interface Task {
 interface TaskProps {
   task: Task;
   onUpdate: (updatedTask: Task) => void;
-  onDelete: (deletedTask: Task) => void;
+  onDelete: (deletedTask: number) => void;
 }
 
 function IndividualTask({ task, onUpdate, onDelete }: TaskProps) {
