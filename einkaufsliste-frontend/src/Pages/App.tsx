@@ -4,11 +4,10 @@ import axios from 'axios'
 import Tasklist from '../Components/Tasklist';
 
 interface Task {
-
-  id: number;
+  id?: number;
   title: string;
   status: boolean;
-  created_at: number;
+  created_at?: number;
   fk_user_id: number;
 }
 
