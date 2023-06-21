@@ -20,10 +20,13 @@ function App() {
 
   async function fetchTasks () {
     try{
-      
+      const response = await axios.get<Task[]>("the backend string");
+      const fetchedTasks = response.data;
+      settasks(fetchedTasks);
+           
     }
-    catch {
-
+    catch (error){
+      console.error("couldnt fetch" , error)
     }
   }
 
