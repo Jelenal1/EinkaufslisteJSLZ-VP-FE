@@ -1,6 +1,6 @@
 import { useState } from 'react'
 interface Task {
-  id?: number;
+  id: number;
   title: string;
   status: boolean;
   created_at: number;
@@ -22,6 +22,7 @@ function IndividualTask({ task, onUpdate, onDelete }: TaskProps) {
   return (
     <div>
       <button onClick={() => handleEditClick()}>✏️</button >
+      <button onClick={() => onDelete(task.id)}>🗑️</button>
       <input type="checkbox" defaultChecked={task.status} />
       <h1>{task.title}</h1>
       <span>{new Date(task.created_at).toLocaleDateString()}</span>
