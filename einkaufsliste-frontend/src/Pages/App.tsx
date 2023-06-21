@@ -10,7 +10,15 @@ interface Task {
 }
 
 function App() {
-  const [tasks, settasks] = useState<Task[]>([])
+  const [tasks, settasks] = useState<Task[]>([
+    {
+      id: 1,
+      title: 'Task 1',
+      status: false,
+      created_at: Date.now(),
+      fk_user_id: 1
+    }
+  ])
 
   useEffect(() => {
     fetchTasks();
@@ -45,11 +53,9 @@ function App() {
 
 
   return (
-    <div>
+    <>
       <Tasklist tasks={tasks} onUpdate={updateTasks} onDelete={deleteTask} />
-
-
-    </div>
+    </>
   )
 }
 
