@@ -1,0 +1,17 @@
+Komponenten Idee
+
+App.js 
+
+	- alle Backend anbindungsmethoden(gettasks, updatetask ,deletetask)
+	- returns Tasklist Component(tasks={tasks (von Gettasks)} onUpdate={updateTask} onDelete={deleteTask})
+
+Tasklist.js(tasks , onupdate, ondelete)
+	- mapped die Tasks, die vom parent comp vom backend geholt wurden
+	- returns tasks.map(task) task={task} onUpdate={onUpdate} onDelete={onDelete}
+
+
+Task.js(task, onupdate, ondelete)
+	- returns ein Checkbox(onchange=> Methode, die die Updatetask methode aufruft),
+	- title vom Task
+	- button (onclick=> Methode, die die DeleteTask Methode aufruft)
+	
