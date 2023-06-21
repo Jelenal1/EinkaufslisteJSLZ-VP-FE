@@ -45,14 +45,23 @@ function App() {
   async function deleteTask(deleteTaskId: number) {
 
     try {
-      await axios.delete("backend string/deleteTaskID");
+      await axios.delete("backend string/deleteTaskId");
       fetchTasks();
     }
     catch (error) {
       console.error("couldnt delete", error);
     }
   }
-  async function postTask(){}
+
+  async function postTask(addedTask: Task){
+    try{
+      await axios.post<Task>("the backend string", addedTask);
+      fetchTasks();
+    }
+    catch(error){
+      console.error("couldnt post", error);
+    }
+  }
 
 
   return (
