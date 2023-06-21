@@ -13,10 +13,11 @@ interface Task {
 interface TaskProps {
   task: Task;
   onUpdate: (updatedTask: Task) => void;
-  onDelete: (deletedTask: Task) => void;
+  onDelete: (deletedTask: number) => void;
+  onAdd: (addedTask: Task) => void;
 }
 
-function IndividualTask({ task, onUpdate, onDelete }: TaskProps) {
+function IndividualTask({ task, onUpdate, onDelete, onAdd }: TaskProps) {
   return(
     <div>
       <h1>{task.title}</h1>

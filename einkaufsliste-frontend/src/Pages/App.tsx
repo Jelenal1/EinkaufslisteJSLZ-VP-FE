@@ -42,19 +42,22 @@ function App() {
     }
   }
 
-  async function deleteTask() {
+  async function deleteTask(deleteTaskId: number) {
+
     try {
-
+      await axios.delete("backend string/deleteTaskID");
+      fetchTasks();
     }
-    catch {
-
+    catch (error) {
+      console.error("couldnt delete", error);
     }
   }
+  async function postTask(){}
 
 
   return (
     <div>
-      <Tasklist tasks={tasks} onUpdate={updateTasks} onDelete={deleteTask} />
+      <Tasklist tasks={tasks} onUpdate={updateTasks} onDelete={deleteTask} onAdd={postTask}/>
 
 
     </div>
