@@ -18,20 +18,32 @@ function App() {
     fetchTasks();
   }, []);
 
-  async function fetchTasks () {
-    try{
+  async function fetchTasks() {
+    try {
       const response = await axios.get<Task[]>("the backend string");
       const fetchedTasks = response.data;
       settasks(fetchedTasks);
-           
+
     }
-    catch (error){
-      console.error("couldnt fetch" , error)
+    catch (error) {
+      console.error("couldnt fetch", error)
     }
   }
 
-  async function updateTasks() {
-    try{
+  async function updateTasks(updatedTask: Task) {
+   
+    try {
+      await axios.patch<Task>("the backend string", updatedTask);
+      fetchTasks();
+
+    }
+    catch (error) {
+      console.error("couldnt update", error)
+    }
+  }
+
+  async function deleteTask() {
+    try {
 
     }
     catch {
@@ -39,19 +51,10 @@ function App() {
     }
   }
 
-  async function deleteTask() {
-    try{
-
-    }
-    catch{
-      
-    }
-  }
-
 
   return (
     <div>
-      <Tasklist tasks={tasks} onUpdate={updateTasks} onDelete={deleteTask}/>
+      <Tasklist tasks={tasks} onUpdate={updateTasks} onDelete={deleteTask} />
 
 
     </div>
