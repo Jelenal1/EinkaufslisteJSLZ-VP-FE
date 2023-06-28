@@ -43,7 +43,7 @@ function App() {
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include', // Include cookies
+        credentials: 'include', 
         body: JSON.stringify({ code: 12345 }),
       });
   
@@ -51,7 +51,7 @@ function App() {
         const data = await response.json();
         console.log(data);
   
-        // Set cookie from response
+       
         const cookie = data.cookie;
         if (cookie) {
           document.cookie = `connect.sid=${cookie}`;
