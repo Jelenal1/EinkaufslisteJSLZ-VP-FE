@@ -20,7 +20,7 @@ interface Task {
 
 interface TaskProps {
   task: Task;
-  onUpdate: (updatedTask: string) => void;
+  onUpdate: (updatedTask: Task) => void;
   onDelete: (deletedTask: number) => void;
   onAdd: (addedTask: Task) => void;
 }
@@ -32,7 +32,7 @@ function IndividualTask({ task, onUpdate, onDelete, onAdd }: TaskProps) {
   const [editTitle, setEditTitle] = useState<string>("");
 
   const handleEditClick = () => {
-    onUpdate(editTitle);
+    onUpdate({ ...task, title: editTitle });
     setEditId(task.id);
     setEditTitle(task.title);
   }
@@ -44,7 +44,7 @@ function IndividualTask({ task, onUpdate, onDelete, onAdd }: TaskProps) {
 
   return (
     <div className={style.taskItem.wrapper}>
-      <input type="checkbox" defaultChecked={task.status} className={style.taskItem.checkbox} />
+      <input type="checkbox" defaultChecked={task.status} className={style.taskItem.checkbox} onChange={() => onUpdate({ ...task, status: !task.status })} />
       {editId ? <input type='text' value={editTitle} onChange={(e) => setEditTitle(e.target.value)} className="text-black" /> : <h1 className={style.taskItem.title}>{task.title}</h1>}
       <span className={style.taskItem.created_at}>{new Date(task.created_at).toLocaleDateString()}</span>
       {editId ? <button onClick={() => onEditFinished()}>✅</button> : <button onClick={() => handleEditClick()}>✏️</button >}
