@@ -20,9 +20,12 @@ interface TaskListProps {
 function TaskList({ tasks, onUpdate, onDelete, onAdd }: TaskListProps) {
   return (
     <div>
-      {tasks.map((task) => (
-        <IndividualTask key={task.id} task={task} onUpdate={onUpdate} onDelete={onDelete} onAdd={onAdd} />
-      ))}
+      <h1 className='text-center text-3xl'>Task List</h1>
+      <div className='my-5 flex flex-col items-center'>
+        {tasks.map((task) => (
+          <IndividualTask key={task.id} task={task} onUpdate={onUpdate} onDelete={onDelete} onAdd={onAdd} />
+        ))}
+      </div>
     </div>
   );
 }
