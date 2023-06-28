@@ -1,4 +1,5 @@
 import IndividualTask from './IndividualTask';
+import Navigation from './Navigation';
 
 interface Task {
   id: number;
@@ -20,6 +21,7 @@ interface TaskListProps {
 function TaskList({ tasks, onUpdate, onDelete, onAdd }: TaskListProps) {
   return (
     <div>
+      <Navigation />
       <h1 className='text-center text-3xl'>Task List</h1>
       <div className='my-5 flex flex-col items-center'>
         {tasks.map((task) => (
