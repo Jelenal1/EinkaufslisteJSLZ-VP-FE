@@ -29,15 +29,24 @@ interface TaskProps {
 
 function IndividualTask({ task, onUpdate, onDelete, onAdd }: TaskProps) {
   const [editId, setEditId] = useState<number | null>();
+  const [editTitle, setEditTitle] = useState<string>("");
+
   const handleEditClick = () => {
     setEditId(task.id);
+    setEditTitle(task.title);
   }
+
+  const onEditFinished = () => {
+    setEditId(null);
+    setEditTitle("");
+  }
+
   return (
     <div className={style.taskItem.wrapper}>
       <input type="checkbox" defaultChecked={task.status} className={style.taskItem.checkbox} />
-      <h1 className={style.taskItem.title}>{task.title}</h1>
+      {editId ? <input type='text' value={editTitle} onChange={(e) => setEditTitle(e.target.value)} className="text-black" /> : <h1 className={style.taskItem.title}>{task.title}</h1>}
       <span className={style.taskItem.created_at}>{new Date(task.created_at).toLocaleDateString()}</span>
-      <button onClick={() => handleEditClick()}>✏️</button >
+      {editId ? <button onClick={() => onEditFinished()}>✅</button> : <button onClick={() => handleEditClick()}>✏️</button >}
       <button onClick={() => onDelete(task.id)}>🗑️</button>
     </div>
   )
