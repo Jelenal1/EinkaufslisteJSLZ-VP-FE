@@ -22,18 +22,12 @@ interface TaskProps {
   task: Task;
   onUpdate: (updatedTask: Task) => void;
   onDelete: (deletedTask: number) => void;
-<<<<<<< HEAD
   onAdd: (addedTask: Task) => void;
 }
 
-function IndividualTask({ task, onUpdate, onDelete, onAdd }: TaskProps) {
-  return(
-    <div>
-      <h1>{task.title}</h1>
-=======
-}
 
-function IndividualTask({ task, onUpdate, onDelete }: TaskProps) {
+
+function IndividualTask({ task, onUpdate, onDelete, onAdd }: TaskProps) {
   const [editId, setEditId] = useState<number | null>();
   const handleEditClick = () => {
     setEditId(task.id);
@@ -45,7 +39,6 @@ function IndividualTask({ task, onUpdate, onDelete }: TaskProps) {
       <span className={style.taskItem.created_at}>{new Date(task.created_at).toLocaleDateString()}</span>
       <button onClick={() => handleEditClick()}>✏️</button >
       <button onClick={() => onDelete(task.id)}>🗑️</button>
->>>>>>> feature/additem
     </div>
   )
 } export default IndividualTask;
