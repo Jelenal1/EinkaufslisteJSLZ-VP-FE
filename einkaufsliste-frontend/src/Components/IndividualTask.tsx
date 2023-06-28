@@ -32,12 +32,12 @@ function IndividualTask({ task, onUpdate, onDelete, onAdd }: TaskProps) {
   const [editTitle, setEditTitle] = useState<string>("");
 
   const handleEditClick = () => {
-    onUpdate({ ...task, title: editTitle });
     setEditId(task.id);
     setEditTitle(task.title);
   }
 
   const onEditFinished = () => {
+    onUpdate({ ...task, title: editTitle });
     setEditId(null);
     setEditTitle("");
   }
