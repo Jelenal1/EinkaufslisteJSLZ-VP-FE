@@ -20,7 +20,7 @@ interface Task {
 
 interface TaskProps {
   task: Task;
-  onUpdate: (updatedTask: Task) => void;
+  onUpdate: (updatedTask: string) => void;
   onDelete: (deletedTask: number) => void;
   onAdd: (addedTask: Task) => void;
 }
@@ -32,6 +32,7 @@ function IndividualTask({ task, onUpdate, onDelete, onAdd }: TaskProps) {
   const [editTitle, setEditTitle] = useState<string>("");
 
   const handleEditClick = () => {
+    onUpdate(editTitle);
     setEditId(task.id);
     setEditTitle(task.title);
   }
