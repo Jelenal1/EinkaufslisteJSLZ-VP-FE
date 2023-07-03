@@ -2,24 +2,18 @@ import { useState, useEffect } from 'react'
 import Tasklist from '../Components/Tasklist';
 import axios from 'axios';
 
-interface Task {
+export interface Task {
+
   id: number;
   title: string;
   status: boolean;
   created_at: number;
   fk_user_id: number;
+
 }
 
 function App() {
-  const [tasks, settasks] = useState<Task[]>([
-    {
-      id: 1,
-      title: 'Task 1',
-      status: false,
-      created_at: Date.now(),
-      fk_user_id: 1
-    }
-  ])
+  const [tasks, settasks] = useState<Task[]>([]);
 
 
 
@@ -43,18 +37,15 @@ function App() {
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include', 
+        credentials: 'include',
         body: JSON.stringify({ code: 12345 }),
       });
-  
+
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
-  
-       
         const cookie = data.cookie;
         if (cookie) {
-          document.cookie = `connect.sid=${cookie}`;
+          document.cookie = `connect.sid=${cookie}; SameSite=None; Secure`;
         }
       } else if (response.status === 401) {
         console.log('Unauthorized');
@@ -70,11 +61,12 @@ function App() {
     try {
       const response = await fetch('http://localhost:3000/items', {
         method: 'GET',
-        credentials: 'include', // Include cookies
+        credentials: 'include',
       });
       if (response.ok) {
         const fetchedTasks = await response.json();
-        console.log(fetchedTasks);
+        settasks(fetchedTasks);
+        console.log(fetchedTasks)
       } else if (response.status === 401) {
         console.log('Unauthorized');
       } else {
@@ -84,33 +76,46 @@ function App() {
       console.error('Could not fetch', error);
     }
   }
-  
-  async function updateTasks(updatedTaskId: number) {
+
+  async function updateTasks(updatedTask: Task, updatedTaskId: number) {
     try {
-      await axios.patch(`http://localhost:3000/items/${updatedTaskId}`, null, {
-        withCredentials: true, // Include cookies
+      await fetch(`http://localhost:3000/items/${updatedTaskId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'withCredentials': 'true'
+        },
+        credentials: 'include',
+        body: JSON.stringify(updatedTask)
       });
       fetchTasks();
     } catch (error) {
       console.error("Couldn't update", error);
     }
   }
-  
+
   async function deleteTask(deleteTaskId: number) {
     try {
-      await axios.delete(`http://localhost:3000/items/${deleteTaskId}`, {
-        withCredentials: true, // Include cookies
+      await fetch(`http://localhost:3000/items/${deleteTaskId}`, {
+        method: 'DELETE',
+        credentials: 'include',
       });
       fetchTasks();
     } catch (error) {
       console.error("Couldn't delete", error);
     }
   }
-  
+
   async function postTask(addedTask: Task) {
     try {
-      await axios.post<Task>('http://localhost:3000/items', addedTask, {
-        withCredentials: true, // Include cookies
+      await fetch('http://localhost:3000/items', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(addedTask),
       });
       fetchTasks();
     } catch (error) {
@@ -118,15 +123,7 @@ function App() {
     }
   }
 
-  useEffect(() => {
-    login();
-    setTimeout(() => {
-      fetchTasks();
-    }, 1000);
-    
-    
-    
-  }, []); 
+
 
   return (
 

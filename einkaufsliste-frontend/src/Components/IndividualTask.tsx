@@ -10,17 +10,19 @@ const style = {
 }
 
 interface Task {
+
   id: number;
   title: string;
   status: boolean;
   created_at: number;
   fk_user_id: number;
+
 }
 
 
 interface TaskProps {
   task: Task;
-  onUpdate: (updatedTask: Task) => void;
+  onUpdate: (updatedTask: Task, updatedTaskId: number) => void;
   onDelete: (deletedTask: number) => void;
   onAdd: (addedTask: Task) => void;
 }
