@@ -123,7 +123,12 @@ function App() {
     }
   }
 
-
+  useEffect(() =>{
+    login();
+    setTimeout(() => {
+      fetchTasks();
+    }, 1000);
+  }, [])
 
   return (
 
