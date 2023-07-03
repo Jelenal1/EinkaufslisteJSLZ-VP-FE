@@ -2,79 +2,127 @@ import { useState, useEffect } from 'react'
 import Tasklist from '../Components/Tasklist';
 import axios from 'axios';
 
-interface Task {
+export interface Task {
+
   id: number;
   title: string;
   status: boolean;
   created_at: number;
   fk_user_id: number;
+
 }
 
 function App() {
-  const [tasks, settasks] = useState<Task[]>([
-    {
-      id: 1,
-      title: 'Task 1',
-      status: false,
-      created_at: Date.now(),
-      fk_user_id: 1
-    }
-  ])
+  const [tasks, settasks] = useState<Task[]>([]);
 
-  useEffect(() => {
-    fetchTasks();
-  }, []);
 
-  async function fetchTasks() {
+
+  /*async function login() {
     try {
-
-      const response = await axios.get<Task[]>("the backend string");
-      const fetchedTasks = response.data;
-      settasks(fetchedTasks);
-
-
+      const response = await axios.post('http://localhost:3000/login', {
+        withCredentials: true,
+        code: 12345
+      });
+  
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
     }
-    catch (error) {
-      console.error("couldnt fetch", error)
+  }*/
+
+  async function login() {
+    try {
+      const response = await fetch('http://localhost:3000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ code: 12345 }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const cookie = data.cookie;
+        if (cookie) {
+          document.cookie = `connect.sid=${cookie}; SameSite=None; Secure`;
+        }
+      } else if (response.status === 401) {
+        console.log('Unauthorized');
+      } else {
+        console.error('Login failed', response);
+      }
+    } catch (error) {
+      console.error('Login failed', error);
     }
   }
 
-
-  async function updateTasks(updatedTask: Task) {
-
+  async function fetchTasks() {
     try {
-      await axios.patch<Task>("the backend string", updatedTask);
-      fetchTasks();
-
-
+      const response = await fetch('http://localhost:3000/items', {
+        method: 'GET',
+        credentials: 'include',
+      });
+      if (response.ok) {
+        const fetchedTasks = await response.json();
+        settasks(fetchedTasks);
+        console.log(fetchedTasks)
+      } else if (response.status === 401) {
+        console.log('Unauthorized');
+      } else {
+        console.error('Could not fetch', response);
+      }
+    } catch (error) {
+      console.error('Could not fetch', error);
     }
-    catch (error) {
-      console.error("couldnt update", error)
+  }
+
+  async function updateTasks(updatedTask: Task, updatedTaskId: number) {
+    try {
+      await fetch(`http://localhost:3000/items/${updatedTaskId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'withCredentials': 'true'
+        },
+        credentials: 'include',
+        body: JSON.stringify(updatedTask)
+      });
+      fetchTasks();
+    } catch (error) {
+      console.error("Couldn't update", error);
     }
   }
 
   async function deleteTask(deleteTaskId: number) {
-
     try {
-      await axios.delete("backend string/deleteTaskId");
+      await fetch(`http://localhost:3000/items/${deleteTaskId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
       fetchTasks();
-    }
-    catch (error) {
-      console.error("couldnt delete", error);
+    } catch (error) {
+      console.error("Couldn't delete", error);
     }
   }
-
 
   async function postTask(addedTask: Task) {
     try {
-      await axios.post<Task>("the backend string", addedTask);
+      await fetch('http://localhost:3000/items', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(addedTask),
+      });
       fetchTasks();
-    }
-    catch (error) {
-      console.error("couldnt post", error);
-
+    } catch (error) {
+      console.error("Couldn't post", error);
     }
   }
+
 
 
   return (

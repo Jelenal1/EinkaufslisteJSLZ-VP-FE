@@ -2,17 +2,18 @@ import IndividualTask from './IndividualTask';
 import Navigation from './Navigation';
 
 interface Task {
+
   id: number;
   title: string;
   status: boolean;
   created_at: number;
   fk_user_id: number;
-}
 
+}
 
 interface TaskListProps {
   tasks: Task[];
-  onUpdate: (updatedTask: Task) => void;
+  onUpdate: (updatedTask: Task, updatedTaskId: number) => void;
   onDelete: (deletedTask: number) => void;
   onAdd: (addedTask: Task) => void;
 }
