@@ -33,6 +33,7 @@ function App() {
         const cookie = data.cookie;
         if (cookie) {
           document.cookie = `connect.sid=${cookie}; SameSite=None; Secure`;
+          setLoggedIn(true);
         }
         
       } else if (response.status === 401) {
@@ -207,7 +208,7 @@ function App() {
       {
         loggedIn ?
           <Tasklist tasks={tasks} onUpdate={updateTasks} onDelete={deleteTask} onAdd={postTask} onLogout={logout} onDeleteAll={deleteList} />
-          : <Login login={login} getSession={getSession} />
+          : <Login login={login} />
       }
     </>
 
