@@ -31,7 +31,7 @@ function TaskList({ tasks, onUpdate, onDelete, onAdd, onDeleteAll, onLogout }: T
     const newTask: Omit<Task, "id" | "created_at"> = {
       title: newTaskTitle,
       status: false,
-      fk_user_id: 1, // Replace with the appropriate user ID
+      fk_user_id: 1, 
     };
 
     onAdd(newTask);

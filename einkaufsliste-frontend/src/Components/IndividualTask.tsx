@@ -70,7 +70,7 @@ function IndividualTask({ task, onUpdate, onDelete, onAdd }: TaskProps) {
           onChange={handleTitleChange}
           onBlur={handleBlur}
           autoFocus
-          className={style.taskItem.inputField} // Apply the inputField class
+          className={style.taskItem.inputField} 
         />
       ) : (
         <>
