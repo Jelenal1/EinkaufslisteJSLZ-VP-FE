@@ -15,21 +15,6 @@ export interface Task {
 function App() {
   const [tasks, settasks] = useState<Task[]>([]);
 
-
-
-  /*async function login() {
-    try {
-      const response = await axios.post('http://localhost:3000/login', {
-        withCredentials: true,
-        code: 12345
-      });
-  
-      console.log(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  }*/
-
   async function login(password: number) {
     try {
       const response = await fetch('http://localhost:3000/login', {
@@ -47,6 +32,7 @@ function App() {
         if (cookie) {
           document.cookie = `connect.sid=${cookie}; SameSite=None; Secure`;
         }
+        
       } else if (response.status === 401) {
         console.log('Unauthorized');
       } else {
@@ -132,11 +118,12 @@ function App() {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        
       });
   
       if (response.ok) {
         
+        document.cookie = 'connect.sid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+  
         console.log('Logged out successfully');
       } else {
         console.error('Logout failed', response);
@@ -166,19 +153,13 @@ function App() {
     }
   }
 
-  useEffect(() => {
-    login(12345);
-    setTimeout(() => {
-      fetchTasks()
-      
-    }, 1000);
-  }, [])
+  
 
 
   return (
 
     <>
-      <Tasklist tasks={tasks} onUpdate={updateTasks} onDelete={deleteTask} onAdd={postTask} onLogout={logout} onDeleteAll={deleteList} />
+      <Tasklist tasks={tasks} onUpdate={updateTasks} onDelete={deleteTask} onAdd={postTask} onLogout={logout} onDeleteAll={deleteList}  />
     </>
 
   )

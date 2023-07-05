@@ -17,6 +17,7 @@ interface TaskListProps {
   onAdd: (addedTask: Omit<Task, "id" | "created_at">) => void;
   onLogout: () => void;
   onDeleteAll: () => void;
+  
 }
 
 function TaskList({ tasks, onUpdate, onDelete, onAdd, onDeleteAll, onLogout }: TaskListProps) {
@@ -44,6 +45,7 @@ function TaskList({ tasks, onUpdate, onDelete, onAdd, onDeleteAll, onLogout }: T
       <Navigation />
       <input type='button' onClick={onDeleteAll} value="Delete All" />
       <input type='button' onClick={onLogout} value="Logout" />
+     
 
       <h1 className='text-center text-3xl'>Task List</h1>
       <div className='my-5 flex flex-col items-center'>
