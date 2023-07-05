@@ -39,13 +39,48 @@ function App() {
         
       } else if (response.status === 401) {
         console.log('Unauthorized');
+        setLoggedIn(false);
       } else {
         console.error('Login failed', response);
+        setLoggedIn(false);
       }
     } catch (error) {
       console.error('Login failed', error);
     }
   }
+
+  async function signUp(password: number) {
+    try {
+      const response = await fetch('http://localhost:3000/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ code: password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const cookie = data.cookie;
+        if (cookie) {
+          document.cookie = `connect.sid=${cookie}; SameSite=None; Secure`;
+          await fetchTasks();
+          setLoggedIn(true);
+        }
+        
+      } else if (response.status === 401) {
+        console.log('Unauthorized');
+        setLoggedIn(false);
+      } else {
+        console.error('Login failed', response);
+        setLoggedIn(false);
+
+      }
+    } catch (error) {
+      console.error('Login failed', error);
+    }
+  }
+
 
   async function fetchTasks() {
     try {
@@ -215,7 +250,7 @@ function App() {
       {
         loggedIn ?
           <Tasklist tasks={tasks} onUpdate={updateTasks} onDelete={deleteTask} onAdd={postTask} onLogout={logout} onDeleteAll={deleteList} />
-          : <Login login={login} />
+          : <Login login={login} signUp={signUp} />
       }
     </>
 
