@@ -65,7 +65,7 @@ function App() {
         if (cookie) {
           document.cookie = `connect.sid=${cookie}; SameSite=None; Secure`;
           await fetchTasks();
-          setLoggedIn(true);
+          await getSession();
         }
         
       } else if (response.status === 401) {

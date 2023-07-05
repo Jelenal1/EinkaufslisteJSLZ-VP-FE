@@ -8,13 +8,10 @@ export default function Login({ login }: { login: (password: number) => void}) {
                 (event) => {
                     event.preventDefault();
                     if (event.target.groupid.value) {
-                    login(parseInt(event.target.groupid.value));
-                    return;
-                }
-                    
-                if (event.target.newgroupid.value) {
-                    signUp(parseInt(event.target.newgroupid.value));
-                    return;
+                        
+                         login(parseInt(event.target.groupid.value));
+                            return;
+                        
                 }
                 }
             }
