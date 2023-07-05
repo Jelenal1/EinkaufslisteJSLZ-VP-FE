@@ -57,17 +57,18 @@ function TaskList({ tasks, onUpdate, onDelete, onAdd, onDeleteAll, onLogout }: T
           />
         ))}
       </div>
-      <button style={{ border: "solid 2px" }} onClick={() => setShowForm(true)}>Add Item</button>
+      <button onClick={() => setShowForm(true)} className='bg-cyan-900 px-2 pb-0.5 text-center text-white rounded-lg m-2'>Add Item</button>
 
       {showForm && (
-        <form onSubmit={handleAddTask}>
+        <form onSubmit={handleAddTask} className='m-2'>
           <input
             type="text"
             value={newTaskTitle}
             onChange={handleNewTaskTitleChange}
             placeholder="Enter task title"
+            className='border rounded-md mr-1'
           />
-          <button type="submit">Add Task</button>
+          <button type="submit" className='bg-cyan-900 px-2 pb-0.5 text-center text-white rounded-lg'>Add Task</button>
         </form>
       )}
     </div>

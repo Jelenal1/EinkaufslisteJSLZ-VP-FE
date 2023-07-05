@@ -33,8 +33,8 @@ function App() {
         const cookie = data.cookie;
         if (cookie) {
           document.cookie = `connect.sid=${cookie}; SameSite=None; Secure`;
+          await fetchTasks();
           setLoggedIn(true);
-          fetchTasks();
         }
         
       } else if (response.status === 401) {
