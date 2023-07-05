@@ -1,47 +1,42 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 import Tasklist from '../Components/Tasklist';
 
-
 export interface Task {
-
   id: number;
   title: string;
   status: boolean;
   created_at: number;
   fk_user_id: number;
-
 }
 
 function App() {
-  const [tasks, settasks] = useState<Task[]>([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
-  async function login(password: number) {
-    try {
-      const response = await fetch('http://localhost:3000/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({code: password}),
-      });
+  useEffect(() => {
+    async function checkSession() {
+      try {
+        const response = await fetch('http://localhost:3000/session', {
+          method: 'GET',
+          credentials: 'include',
+        });
 
-      if (response.ok) {
-        const data = await response.json();
-        const cookie = data.cookie;
-        if (cookie) {
-          document.cookie = `connect.sid=${cookie}; SameSite=None; Secure`;
+        if (response.ok) {
+          setIsLoggedIn(true);
+          await fetchTasks();
+        } else if (response.status === 401) {
+          setIsLoggedIn(false);
+          console.log("not session")
+        } else {
+          console.error('Failed to get session', response);
         }
-        
-      } else if (response.status === 401) {
-        console.log('Unauthorized');
-      } else {
-        console.error('Login failed', response);
+      } catch (error) {
+        console.error('Failed to get session', error);
       }
-    } catch (error) {
-      console.error('Login failed', error);
     }
-  }
+
+    checkSession();
+  }, []);
 
   async function fetchTasks() {
     try {
@@ -49,10 +44,11 @@ function App() {
         method: 'GET',
         credentials: 'include',
       });
+
       if (response.ok) {
         const fetchedTasks = await response.json();
-        settasks(fetchedTasks);
-        console.log(fetchedTasks)
+        setTasks(fetchedTasks);
+        console.log(fetchedTasks);
       } else if (response.status === 401) {
         console.log('Unauthorized');
       } else {
@@ -70,11 +66,11 @@ function App() {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'withCredentials': 'true'
+          Accept: 'application/json',
+          withCredentials: 'true',
         },
         credentials: 'include',
-        body: JSON.stringify(updatedTask)
+        body: JSON.stringify(updatedTask),
       });
       await fetchTasks();
     } catch (error) {
@@ -94,7 +90,7 @@ function App() {
     }
   }
 
-  async function postTask(newTask: Omit<Task, "id" | "created_at">) {
+  async function postTask(newTask: Omit<Task, 'id' | 'created_at'>) {
     try {
       await fetch('http://localhost:3000/items', {
         method: 'POST',
@@ -119,12 +115,15 @@ function App() {
         },
         credentials: 'include',
       });
-  
+
       if (response.ok) {
-        
-        document.cookie = 'connect.sid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-  
+        document.cookie =
+          'connect.sid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+
         console.log('Logged out successfully');
+        await fetchTasks();
+        setTasks([]);
+        setIsLoggedIn(false);
       } else {
         console.error('Logout failed', response);
       }
@@ -132,15 +131,15 @@ function App() {
       console.error('Logout failed', error);
     }
   }
+
   async function deleteList() {
     try {
       const response = await fetch('http://localhost:3000/list', {
         method: 'DELETE',
         credentials: 'include',
       });
-  
+
       if (response.ok) {
-        
         console.log('List deleted successfully');
         await fetchTasks();
       } else if (response.status === 401) {
@@ -153,16 +152,77 @@ function App() {
     }
   }
 
-  
+  async function login(password: number) {
+    setIsLoggedIn(true)
+    try {
+      const response = await fetch('http://localhost:3000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ code: password }),
+      });
 
+      if (response.ok) {
+        const data = await response.json();
+        const cookie = data.cookie;
+        if (cookie) {
+          document.cookie = `connect.sid=${cookie}; SameSite=None; Secure`;
+          setIsLoggedIn(true);
+          await fetchTasks();
+        }
+      } else if (response.status === 401) {
+        console.log('Unauthorized');
+        alert("wrong password");
+      } else {
+        console.error('Login failed', response);
+      }
+    } catch (error) {
+      console.error('Login failed', error);
+    }
+  }
+
+  function LoginForm({ onLogin }: { onLogin: (password: number) => void }) {
+    const [password, setPassword] = useState('');
+
+    function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+      event.preventDefault();
+      const passwordNumber = parseInt(password, 10);
+      onLogin(passwordNumber);
+    }
+
+    return (
+      <form onSubmit={handleSubmit}>
+        <label>
+          Password:
+          <input
+            type="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
+        </label>
+        <button type="submit">Login</button>
+      </form>
+    );
+  }
+
+  if (!isLoggedIn) {
+    return <LoginForm onLogin={login} />;
+  }
 
   return (
-
     <>
-      <Tasklist tasks={tasks} onUpdate={updateTasks} onDelete={deleteTask} onAdd={postTask} onLogout={logout} onDeleteAll={deleteList}  />
+      <Tasklist
+        tasks={tasks}
+        onUpdate={updateTasks}
+        onDelete={deleteTask}
+        onAdd={postTask}
+        onLogout={logout}
+        onDeleteAll={deleteList}
+      />
     </>
-
-  )
+  );
 }
 
-export default App
+export default App;
