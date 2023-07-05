@@ -1,13 +1,14 @@
 
 
 
-export default function Login({ login }: { login: (password: number) => void }) {
+export default function Login({ login, getSession }: { login: (password: number) => void, getSession: () => void }) {
     return (
         <div>
             <form onSubmit={
                 (event) => {
                     event.preventDefault();
-                    login(event.target.groupid.value);
+                    login(parseInt(event.target.groupid.value));
+                    location.reload()
                 }
             }
                 className="flex flex-col max-w-xl gap-2 text-center"

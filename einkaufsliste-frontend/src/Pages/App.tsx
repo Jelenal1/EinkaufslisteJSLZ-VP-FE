@@ -207,14 +207,14 @@ function App() {
 
   useEffect(() => {
     getSession();
-  })
+  }, [])
 
   return (
     <>
       {
         loggedIn ?
           <Tasklist tasks={tasks} onUpdate={updateTasks} onDelete={deleteTask} onAdd={postTask} onLogout={logout} onDeleteAll={deleteList} />
-          : <Login login={login} />
+          : <Login login={login} getSession={getSession} />
       }
     </>
 
