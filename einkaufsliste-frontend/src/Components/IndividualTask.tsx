@@ -6,7 +6,7 @@ const style = {
     checkbox: 'mr-2 aspect-square w-6',
     title: 'mr-2',
     created_at: 'mr-2',
-    inputField: 'text-white bg-gray-800', // Add class for input field
+    inputField: 'text-white bg-gray-800', 
   },
 };
 

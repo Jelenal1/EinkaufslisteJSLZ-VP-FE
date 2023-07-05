@@ -108,7 +108,7 @@ function App() {
     }
   }
 
-  async function postTask(addedTask: Task) {
+  async function postTask(newTask: Omit<Task, "id" | "created_at">) {
     try {
       await fetch('http://localhost:3000/items', {
         method: 'POST',
@@ -116,7 +116,7 @@ function App() {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify(addedTask),
+        body: JSON.stringify(newTask),
       });
       await fetchTasks();
     } catch (error) {
