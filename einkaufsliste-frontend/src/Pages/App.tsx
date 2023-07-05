@@ -30,7 +30,7 @@ function App() {
     }
   }*/
 
-  async function login() {
+  async function login(password: number) {
     try {
       const response = await fetch('http://localhost:3000/login', {
         method: 'POST',
@@ -38,7 +38,7 @@ function App() {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify({ code: 12345 }),
+        body: JSON.stringify({code: password}),
       });
 
       if (response.ok) {
@@ -123,17 +123,53 @@ function App() {
     }
   }
 
-  useEffect(() =>{
-    login();
-    setTimeout(() => {
-      fetchTasks();
-    }, 1000);
-  }, [])
+  async function logout() {
+    try {
+      const response = await fetch('http://localhost:3000/logout', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        
+      });
+  
+      if (response.ok) {
+        
+        console.log('Logged out successfully');
+      } else {
+        console.error('Logout failed', response);
+      }
+    } catch (error) {
+      console.error('Logout failed', error);
+    }
+  }
+  async function deleteList() {
+    try {
+      const response = await fetch('http://localhost:3000/list', {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+  
+      if (response.ok) {
+        // Handle successful deletion
+        console.log('List deleted successfully');
+      } else if (response.status === 401) {
+        console.log('Unauthorized');
+      } else {
+        console.error('Delete failed', response);
+      }
+    } catch (error) {
+      console.error('Delete failed', error);
+    }
+  }
+
+
 
   return (
 
     <>
-      <Tasklist tasks={tasks} onUpdate={updateTasks} onDelete={deleteTask} onAdd={postTask} />
+      <Tasklist tasks={tasks} onUpdate={updateTasks} onDelete={deleteTask} onAdd={postTask} onLogout={logout} onDeleteAll={deleteList} />
     </>
 
   )
