@@ -89,7 +89,7 @@ function App() {
         credentials: 'include',
         body: JSON.stringify(updatedTask)
       });
-      fetchTasks();
+      await fetchTasks();
     } catch (error) {
       console.error("Couldn't update", error);
     }
@@ -101,7 +101,7 @@ function App() {
         method: 'DELETE',
         credentials: 'include',
       });
-      fetchTasks();
+      await fetchTasks();
     } catch (error) {
       console.error("Couldn't delete", error);
     }
@@ -117,7 +117,7 @@ function App() {
         credentials: 'include',
         body: JSON.stringify(addedTask),
       });
-      fetchTasks();
+      await fetchTasks();
     } catch (error) {
       console.error("Couldn't post", error);
     }
@@ -154,7 +154,7 @@ function App() {
       if (response.ok) {
         
         console.log('List deleted successfully');
-        fetchTasks();
+        await fetchTasks();
       } else if (response.status === 401) {
         console.log('Unauthorized');
       } else {
