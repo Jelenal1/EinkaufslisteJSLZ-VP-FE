@@ -209,6 +209,7 @@ function App() {
 
   useEffect(() => {
     getSession();
+    fetchTasks();
   }, [])
 
   return (
