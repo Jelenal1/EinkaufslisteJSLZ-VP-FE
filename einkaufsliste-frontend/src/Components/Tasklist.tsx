@@ -42,9 +42,7 @@ function TaskList({ tasks, onUpdate, onDelete, onAdd, onDeleteAll, onLogout }: T
 
   return (
     <div>
-      <Navigation />
-      <input type='button' onClick={onDeleteAll} value="Delete All" />
-      <input type='button' onClick={onLogout} value="Logout" />
+      <Navigation onDeleteAll={onDeleteAll} logout={onLogout}/>
      
 
       <h1 className='text-center text-3xl'>Task List</h1>
