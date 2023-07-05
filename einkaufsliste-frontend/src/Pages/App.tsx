@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Tasklist from '../Components/Tasklist';
-import axios from 'axios';
 import Login from './Login';
+
 
 export interface Task {
 
@@ -16,21 +16,6 @@ export interface Task {
 function App() {
   const [tasks, settasks] = useState<Task[]>([]);
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
-
-
-
-  /*async function login() {
-    try {
-      const response = await axios.post('http://localhost:3000/login', {
-        withCredentials: true,
-        code: 12345
-      });
-  
-      console.log(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  }*/
 
   async function login(password: number) {
     try {
@@ -49,6 +34,7 @@ function App() {
         if (cookie) {
           document.cookie = `connect.sid=${cookie}; SameSite=None; Secure`;
         }
+        
       } else if (response.status === 401) {
         console.log('Unauthorized');
       } else {
@@ -80,6 +66,7 @@ function App() {
   }
 
   async function updateTasks(updatedTask: Task, updatedTaskId: number) {
+    console.log(updatedTask);
     try {
       await fetch(`http://localhost:3000/items/${updatedTaskId}`, {
         method: 'PATCH',
@@ -91,7 +78,7 @@ function App() {
         credentials: 'include',
         body: JSON.stringify(updatedTask)
       });
-      fetchTasks();
+      await fetchTasks();
     } catch (error) {
       console.error("Couldn't update", error);
     }
@@ -103,13 +90,13 @@ function App() {
         method: 'DELETE',
         credentials: 'include',
       });
-      fetchTasks();
+      await fetchTasks();
     } catch (error) {
       console.error("Couldn't delete", error);
     }
   }
 
-  async function postTask(addedTask: Task) {
+  async function postTask(newTask: Omit<Task, "id" | "created_at">) {
     try {
       await fetch('http://localhost:3000/items', {
         method: 'POST',
@@ -117,9 +104,9 @@ function App() {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify(addedTask),
+        body: JSON.stringify(newTask),
       });
-      fetchTasks();
+      await fetchTasks();
     } catch (error) {
       console.error("Couldn't post", error);
     }
@@ -133,11 +120,12 @@ function App() {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-
       });
 
       if (response.ok) {
 
+        document.cookie = 'connect.sid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+  
         console.log('Logged out successfully');
       } else {
         console.error('Logout failed', response);
@@ -156,7 +144,7 @@ function App() {
       if (response.ok) {
 
         console.log('List deleted successfully');
-        fetchTasks();
+        await fetchTasks();
       } else if (response.status === 401) {
         console.log('Unauthorized');
       } else {
@@ -166,6 +154,7 @@ function App() {
       console.error('Delete failed', error);
     }
   }
+
 
   async function getSession() {
 
@@ -214,6 +203,7 @@ function App() {
 
   return (
     <>
+
       {
         loggedIn ?
           <Tasklist tasks={tasks} onUpdate={updateTasks} onDelete={deleteTask} onAdd={postTask} onLogout={logout} onDeleteAll={deleteList} />
