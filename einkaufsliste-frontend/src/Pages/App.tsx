@@ -34,6 +34,7 @@ function App() {
         if (cookie) {
           document.cookie = `connect.sid=${cookie}; SameSite=None; Secure`;
           setLoggedIn(true);
+          fetchTasks();
         }
         
       } else if (response.status === 401) {
@@ -128,6 +129,7 @@ function App() {
         document.cookie = 'connect.sid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
   
         console.log('Logged out successfully');
+        setLoggedIn(false);
       } else {
         console.error('Logout failed', response);
       }
@@ -139,7 +141,12 @@ function App() {
     try {
       const response = await fetch('http://localhost:3000/list', {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          
+        },
         credentials: 'include',
+        
       });
 
       if (response.ok) {
