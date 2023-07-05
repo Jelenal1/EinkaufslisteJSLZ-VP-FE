@@ -78,6 +78,7 @@ function App() {
   }
 
   async function updateTasks(updatedTask: Task, updatedTaskId: number) {
+    console.log(updatedTask);
     try {
       await fetch(`http://localhost:3000/items/${updatedTaskId}`, {
         method: 'PATCH',

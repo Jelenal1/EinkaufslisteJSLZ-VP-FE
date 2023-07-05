@@ -6,7 +6,7 @@ const style = {
     checkbox: 'mr-2 aspect-square w-6',
     title: 'mr-2',
     created_at: 'mr-2',
-    inputField: 'text-white bg-gray-800', 
+    inputField: 'text-white bg-gray-800', // Add class for input field
   },
 };
 
@@ -28,6 +28,7 @@ interface TaskProps {
 function IndividualTask({ task, onUpdate, onDelete, onAdd }: TaskProps) {
   const [editId, setEditId] = useState<number | null>(null);
   const [editedTitle, setEditedTitle] = useState(task.title);
+  const [taskStatus, setTaskStatus] = useState(task.status);
 
   const handleEditClick = () => {
     setEditId(task.id);
@@ -46,16 +47,21 @@ function IndividualTask({ task, onUpdate, onDelete, onAdd }: TaskProps) {
     setEditId(null);
   };
 
+  const handleCheckboxClick = () => {
+    const updatedStatus = !taskStatus;
+    setTaskStatus(updatedStatus);
+
+    const updatedTask: Task = { ...task, status: updatedStatus };
+    onUpdate(updatedTask, task.id);
+  };
+
   return (
     <div className={style.taskItem.wrapper}>
       <input
         type="checkbox"
-        checked={task.status}
+        checked={taskStatus}
         className={style.taskItem.checkbox}
-        onClick={() => {
-          const updatedTask: Task = { ...task, status: !task.status };
-          onUpdate(updatedTask, task.id);
-        }}
+        onClick={handleCheckboxClick}
       />
       {editId === task.id ? (
         <input
@@ -64,7 +70,7 @@ function IndividualTask({ task, onUpdate, onDelete, onAdd }: TaskProps) {
           onChange={handleTitleChange}
           onBlur={handleBlur}
           autoFocus
-          className={style.taskItem.inputField} 
+          className={style.taskItem.inputField} // Apply the inputField class
         />
       ) : (
         <>
