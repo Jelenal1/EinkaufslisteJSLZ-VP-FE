@@ -154,8 +154,9 @@ function App() {
       });
 
       if (response.ok) {
-        // Handle successful deletion
+
         console.log('List deleted successfully');
+        fetchTasks();
       } else if (response.status === 401) {
         console.log('Unauthorized');
       } else {
@@ -167,6 +168,7 @@ function App() {
   }
 
   async function getSession() {
+
 
     try {
 
