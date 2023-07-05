@@ -9,11 +9,13 @@ export default function Login({ login }: { login: () => void }) {
                     event.preventDefault();
                     login();
                 }
-            }>
-                <label htmlFor="groupid">GroupID</label>
-                <input type="text" id="groupid" />
+            }
+                className="flex flex-col max-w-xl gap-2 text-center"
+            >
+                <label htmlFor="groupid">Join Group with ID</label>
+                <input type="text" id="groupid" className="border border-gray-400" />
                 <label htmlFor="newgroupid">Create a new Group</label>
-                <input type="text" id="newgroupid" />
+                <input type="text" id="newgroupid" className="border border-gray-400" />
                 <input type="submit" value="Login" />
             </form>
         </div>
