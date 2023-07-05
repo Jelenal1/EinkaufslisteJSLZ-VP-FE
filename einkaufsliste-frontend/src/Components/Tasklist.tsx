@@ -16,6 +16,8 @@ interface TaskListProps {
   onUpdate: (updatedTask: Task, updatedTaskId: number) => void;
   onDelete: (deletedTask: number) => void;
   onAdd: (addedTask: Task) => void;
+  onLogout: (password: number) => void;
+  onDeleteAll: () => void;
 }
 
 
