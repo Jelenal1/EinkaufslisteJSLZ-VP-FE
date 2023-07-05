@@ -14,29 +14,29 @@ function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
-    async function checkSession() {
-      try {
-        const response = await fetch('http://localhost:3000/session', {
-          method: 'GET',
-          credentials: 'include',
-        });
-
-        if (response.ok) {
-          setIsLoggedIn(true);
-          await fetchTasks();
-        } else if (response.status === 401) {
-          setIsLoggedIn(false);
-          console.log("not session")
-        } else {
-          console.error('Failed to get session', response);
-        }
-      } catch (error) {
-        console.error('Failed to get session', error);
-      }
-    }
-
     checkSession();
   }, []);
+
+  async function checkSession() {
+    try {
+      const response = await fetch('http://localhost:3000/session', {
+        method: 'GET',
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+        setIsLoggedIn(true);
+        await fetchTasks();
+      } else if (response.status === 401) {
+        setIsLoggedIn(false);
+        console.log('Not logged in');
+      } else {
+        console.error('Failed to get session', response);
+      }
+    } catch (error) {
+      console.error('Failed to get session', error);
+    }
+  }
 
   async function fetchTasks() {
     try {
@@ -60,14 +60,12 @@ function App() {
   }
 
   async function updateTasks(updatedTask: Task, updatedTaskId: number) {
-    console.log(updatedTask);
     try {
       await fetch(`http://localhost:3000/items/${updatedTaskId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
-          withCredentials: 'true',
         },
         credentials: 'include',
         body: JSON.stringify(updatedTask),
@@ -119,11 +117,9 @@ function App() {
       if (response.ok) {
         document.cookie =
           'connect.sid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-
-        console.log('Logged out successfully');
-        await fetchTasks();
-        setTasks([]);
         setIsLoggedIn(false);
+        setTasks([]);
+        console.log('Logged out successfully');
       } else {
         console.error('Logout failed', response);
       }
@@ -153,7 +149,6 @@ function App() {
   }
 
   async function login(password: number) {
-    setIsLoggedIn(true)
     try {
       const response = await fetch('http://localhost:3000/login', {
         method: 'POST',
@@ -174,7 +169,7 @@ function App() {
         }
       } else if (response.status === 401) {
         console.log('Unauthorized');
-        alert("wrong password");
+        alert('Wrong password');
       } else {
         console.error('Login failed', response);
       }
