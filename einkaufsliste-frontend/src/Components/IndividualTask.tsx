@@ -32,7 +32,7 @@ interface TaskProps {
 function IndividualTask({ task, onUpdate, onDelete, onAdd }: TaskProps) {
   const [editId, setEditId] = useState<number | null>();
   const handleEditClick = () => {
-    setEditId(task.id);
+    setEditId(task.id);  
   }
   return (
     <div className={style.taskItem.wrapper}>
