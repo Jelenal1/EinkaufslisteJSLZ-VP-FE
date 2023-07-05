@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Tasklist from '../Components/Tasklist';
 import axios from 'axios';
+import Login from './Login';
 
 export interface Task {
 
@@ -14,6 +15,7 @@ export interface Task {
 
 function App() {
   const [tasks, settasks] = useState<Task[]>([]);
+  const [loggedIn, setLoggedIn] = useState<boolean>(false);
 
 
 
@@ -38,7 +40,7 @@ function App() {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify({code: password}),
+        body: JSON.stringify({ code: password }),
       });
 
       if (response.ok) {
@@ -131,11 +133,11 @@ function App() {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        
+
       });
-  
+
       if (response.ok) {
-        
+
         console.log('Logged out successfully');
       } else {
         console.error('Logout failed', response);
@@ -150,7 +152,7 @@ function App() {
         method: 'DELETE',
         credentials: 'include',
       });
-  
+
       if (response.ok) {
         // Handle successful deletion
         console.log('List deleted successfully');
@@ -164,13 +166,59 @@ function App() {
     }
   }
 
+  async function getSession() {
 
+    try {
+
+      const response = await fetch('http://localhost:3000/session', {
+
+        method: 'GET',
+
+        credentials: 'include',
+
+      });
+
+
+      if (response.ok) {
+
+        const sessionData = await response.json();
+
+        setLoggedIn(true);
+
+      } else if (response.status === 401) {
+
+        console.log('Unauthorized');
+        setLoggedIn(false);
+
+      } else {
+
+        console.error('Failed to get session', response);
+        setLoggedIn(false);
+
+      }
+
+    } catch (error) {
+
+      console.error('Failed to get session', error);
+
+    }
+
+  }
+
+  useEffect(() => {
+    getSession();
+  })
 
   return (
-
     <>
-      <Tasklist tasks={tasks} onUpdate={updateTasks} onDelete={deleteTask} onAdd={postTask} onLogout={logout} onDeleteAll={deleteList} />
+      {
+        loggedIn ?
+          <Tasklist tasks={tasks} onUpdate={updateTasks} onDelete={deleteTask} onAdd={postTask} onLogout={logout} onDeleteAll={deleteList} />
+          : <Login login={login} />
+      }
     </>
+
+
 
   )
 }
